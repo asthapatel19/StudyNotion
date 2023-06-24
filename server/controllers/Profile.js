@@ -48,7 +48,7 @@ exports.updateProfile = async (req,res)=>{
     }
 }
 
-//how to schedule this delete operation??
+//to find  -- how to schedule this delete operation??
 exports.deleteAccount = async (req,res) =>{
     try{
 
