@@ -1,5 +1,5 @@
 const Course = require('../models/Course')
-const Tag = require('../models/Tag')
+const Category = require('../models/Category')
 const User = require('../models/User')
 const {uploadImageToCloudinary} = require('../utils/imageUploader')
 
@@ -8,13 +8,13 @@ exports.createCourse = async (req,res) => {
     try{
 
         //fetch data
-        const {courseName,courseDescription,whatYouWillLearn,price,tag}= req.body
+        const {courseName,courseDescription,whatYouWillLearn,price,tag,category,status,instructions}= req.body
 
         //get thumbnail
         const thumbnail = req.files.thumbnailImage;
 
         //validation
-        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !thumbnail){
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !category || !thumbnail){
             return res.status(400).json({
                 success:false,
                 message:'All files are required'
@@ -25,7 +25,9 @@ exports.createCourse = async (req,res) => {
         
         //stored in payload in auth
         const userId= req.user.id;
-        const instructorDetails = await User.findById(userId)
+        const instructorDetails = await User.findById(userId, {
+			accountType: "Instructor",
+		});
         console.log('Instructor Details: ',instructorDetails)
 
         if(!instructorDetails){
@@ -36,8 +38,8 @@ exports.createCourse = async (req,res) => {
         }
 
         //check given tag is valid or not
-        const tagDetails = await Tag.findById(tag)
-        if(!tagDetails){
+        const categoryDetails = await Category.findById(category)
+        if(!categoryDetails){
             return res.status(404).json({
                 success:false,
                 message:'Tag Details Not Found'
@@ -46,6 +48,7 @@ exports.createCourse = async (req,res) => {
 
         //upload image to cloudinary
         const thumbnailImage = await uploadImageToCloudinary(thumbnail,process.env.FOLDER_NAME);
+        console.log(thumbnailImage)
 
         //create an entry for new course
         const newCourse = await Course.create({
@@ -54,8 +57,11 @@ exports.createCourse = async (req,res) => {
             instructor: instructorDetails._id,
             whatYouWillLearn:whatYouWillLearn,
             price,
-            tag:tagDetails._id,
+            tag:tag,
+            category:categoryDetails._id,
             thumbnail:thumbnailImage.secure_url,
+            status:status,
+            instructions:instructions,
         })
 
         //update user -- instructor -- in instructor course list
@@ -70,8 +76,16 @@ exports.createCourse = async (req,res) => {
             {new:true},
         )
 
-        //update tag schema
-        //TODO
+        //update category schema - add new course id to it
+        await Category.findByIdAndUpdate(
+            {_id:category},
+            {
+                $push:{
+                    course:newCourse._id,
+                }
+            },
+            {new:true}
+        )
 
         return res.status(200).json({
             success:true,
@@ -91,14 +105,16 @@ exports.createCourse = async (req,res) => {
 }
 
 //getAllCourses
-exports.showAllCourses = async (req,res) =>{
+exports.getAllCourses = async (req,res) =>{
     try{
 
         const allCourses = await Course.find({},{courseName:true,
                                                  price:true,
                                                  thumbnail:true,
                                                  instructor:true,
-                                                 ratingAndReviews:true,})
+                                                 ratingAndReviews:true,
+                                                 studentsEnrolled:trye,
+                                                })
                                                  .populate("instructor")
                                                  .exec();
 
