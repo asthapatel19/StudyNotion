@@ -35,16 +35,11 @@ exports.sendOTP = async (req,res)=>{
         //check unique otp or not
         let result = await OTP.findOne({otp:otp});
 
-        while(result){
-
-            opt = otpGenerator(6,{
-                upperCaseAlphabets:false,
-                lowerCaseAlphabets:false,
-                specialChars:false,
-            })
-
-            result = await OTP.findOne({otp:otp});
-        }
+        while (result) {
+			otp = otpGenerator.generate(6, {
+				upperCaseAlphabets: false,
+			});
+		}
 
         //create otp object and store in DB
         const otpPayload = {email,otp}
@@ -56,7 +51,8 @@ exports.sendOTP = async (req,res)=>{
         //return response
         res.status(200).json({
             success:true,
-            message:'OTP Sent Successfully'
+            message:'OTP Sent Successfully',
+            otp,
         })
 
     }catch(error){
