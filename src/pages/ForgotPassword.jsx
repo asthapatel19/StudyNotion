@@ -1,14 +1,21 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 export const ForgotPassword = () => {
 
     const [emailSent,setEmailSent] = useState(false)
     const [email,setEmail] = useState("")
     const {loading} = useSelector((state)=>state.auth)
+    const dispatch = useDispatch()
+
+    const handleOnSubmit = (e) => {
+        e.preventDefault()
+       // dispatch(getPasswordResetToken(email, setEmailSent))
+    }
 
   return (
-    <div className=''>
+    <div className='text-white flex justify-center items-center'>
         {
             loading ? (
 
@@ -30,7 +37,7 @@ export const ForgotPassword = () => {
                         }
                     </p>
 
-                    <form>
+                    <form onSubmit={handleOnSubmit}>
                         {
                             !emailSent && (
                                 <label>
@@ -48,7 +55,22 @@ export const ForgotPassword = () => {
                                 </label>
                             )
                         }
+
+                        <button 
+                          type='submit'
+                        >
+                            {
+                                !emailSent ? "Reset Password" : "Resend Email"
+                            }
+                        </button>
                     </form>
+
+                    <div>
+                        <Link to="/login">
+                            <p>Back to Login</p>
+                        </Link>
+                    </div>
+
 
                 </div>
             )
