@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { getPasswordResetToken } from "../services/operations/authAPI"
 
 export const ForgotPassword = () => {
 
@@ -11,7 +12,7 @@ export const ForgotPassword = () => {
 
     const handleOnSubmit = (e) => {
         e.preventDefault()
-       // dispatch(getPasswordResetToken(email, setEmailSent))
+        dispatch(getPasswordResetToken(email, setEmailSent))
     }
 
   return (
@@ -70,7 +71,6 @@ export const ForgotPassword = () => {
                             <p>Back to Login</p>
                         </Link>
                     </div>
-
 
                 </div>
             )
