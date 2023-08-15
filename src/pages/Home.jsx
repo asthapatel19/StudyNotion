@@ -49,12 +49,14 @@ const Home = () => {
                 </CTAButton>
             </div>
             
-            <div className='mx-3 my-12 shadow-blue-200 '>
+            <div className="mx-3 my-7 shadow-[10px_-5px_50px_-5px] shadow-blue-200">
                 <video
-                 muted 
-                 loop 
-                 autoPlay>
-                    <source src={Banner} type='video/mp4'/>
+                    className="shadow-[20px_20px_rgba(255,255,255)]"
+                    muted
+                    loop
+                    autoPlay
+                >
+                    <source src={Banner} type="video/mp4" />
                 </video>
             </div>
 
@@ -74,14 +76,14 @@ const Home = () => {
                     }
                     ctabtn1={
                         {
-                            btnText: "try it yourself",
+                            btnText: "Try it yourself",
                             linkto:"/signup",
                             active:true,
                         }
                     }
                     ctabtn2={
                         {
-                            btnText: "learn more",
+                            btnText: "Learn More",
                             linkto:"/login",
                             active:false,
                         }
@@ -107,14 +109,14 @@ const Home = () => {
                     }
                     ctabtn1={
                         {
-                            btnText: "try it yourself",
+                            btnText: "Try it yourself",
                             linkto:"/signup",
                             active:true,
                         }
                     }
                     ctabtn2={
                         {
-                            btnText: "learn more",
+                            btnText: "Learn More",
                             linkto:"/login",
                             active:false,
                         }
@@ -129,7 +131,7 @@ const Home = () => {
         </div>
 
         {/*Section-2*/}
-        <div className='bg-pure-greys-5 text-richblack-700'>
+        <div className='bg-pure-greys-5 text-richblack-700 mt-5'>
         
             <div className='homepage_bg h-[310px]'>
                 <div className='w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-5 mx-auto'>
